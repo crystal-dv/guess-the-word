@@ -33,6 +33,20 @@ const placeCircles = function (word) {
 
 getWord();
 
+guessButton.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    message.innerText = "";  
+    const guess = letterInput.value;
+    const goodGuess = checkInput(guess);
+
+    if (goodGuess) {
+        makeGuess(guess);
+    };
+
+    letterInput.value = "";
+});
+
 const checkInput = function (guess) {
     const acceptedLetter = /[a-zA-Z]/;
 
@@ -48,15 +62,15 @@ const checkInput = function (guess) {
     };
 };
 
-const makeGuess = function(goodGuess) {
-    goodGuess.toUpperCase();
+const makeGuess = function(guess) {
+    guess = guess.toUpperCase();
 
-    if (guessedLetters.includes(goodGuess)) {
-        message.innerText = `You've already guessed ${goodGuess.toUpperCase()}. Try something else, silly.`;
+    if (guessedLetters.includes(guess)) {
+        message.innerText = `You've already guessed ${guess.toUpperCase()}. Try something else, silly.`;
     } else {
-        guessedLetters.push(goodGuess);
+        guessedLetters.push(guess);
         displayGuesses(guessedLetters);
-        guessCounter(goodGuess);
+        guessCounter(guess);
         progressUpdate(guessedLetters);
     };
 };
@@ -71,9 +85,11 @@ const displayGuesses = function (guessedLetters) {
 };
 
 const progressUpdate = function (guessedLetters) {
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
     const progressArray = [];
     
-    for (const letter of word) {
+    for (const letter of wordArray) {
         if (guessedLetters.includes(letter)) {
             progressArray.push(letter.toUpperCase());
         } else {
@@ -84,19 +100,19 @@ const progressUpdate = function (guessedLetters) {
     playerWin();
 };
 
-const guessCounter = function(goodGuess) {
+const guessCounter = function(guess) {
     word.toUpperCase();
 
-    if (!word.includes(goodGuess)) {
-        message.innerText = `The word does not contain ${goodGuess.toUpperCase()}.`;
+    if (!word.includes(guess)) {
+        message.innerText = `The word does not contain ${guess.toUpperCase()}.`;
         remainingGuesses = remainingGuesses - 1;         
     } else {
-        message.innerText = `Yes! ${goodGuess.toUpperCase()} is a correct guess!`;
+        message.innerText = `Yes! ${guess.toUpperCase()} is a correct guess!`;
     };
 
 
     if (remainingGuesses === 0) {
-        message.innerText = `Game Over... The word is ${word}.`;
+        message.innerText = `Game Over... The word is ${word.toUpperCase()}.`;
         startOver();
     } else if (remainingGuesses === 1) {
         guessCount.innerText = `${remainingGuesses} guess `;
@@ -113,21 +129,6 @@ const playerWin = function () {
         startOver();
     };
 };  
-
-guessButton.addEventListener("click", function (e) {
-    e.preventDefault();
-    const guess = letterInput.value;
-
-    message.innerText = "";
-
-    const goodGuess = checkInput(guess);
-
-    if (goodGuess) {
-        makeGuess(goodGuess);
-    };
-
-    letterInput.value = "";
-});
 
 const startOver = function () {
     guessButton.classList.add("hide");
