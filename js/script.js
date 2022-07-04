@@ -101,18 +101,19 @@ const progressUpdate = function (guessedLetters) {
 };
 
 const guessCounter = function(guess) {
-    word.toUpperCase();
+    const wordUpper = word.toUpperCase();
+    const guessUpper = guess.toUpperCase();
 
-    if (!word.includes(guess)) {
-        message.innerText = `The word does not contain ${guess.toUpperCase()}.`;
+    if (!wordUpper.includes(guessUpper)) {
+        message.innerText = `The word does not contain ${guessUpper}.`;
         remainingGuesses = remainingGuesses - 1;         
     } else {
-        message.innerText = `Yes! ${guess.toUpperCase()} is a correct guess!`;
+        message.innerText = `Yes! ${guessUpper} is a correct guess!`;
     };
 
 
     if (remainingGuesses === 0) {
-        message.innerText = `Game Over... The word is ${word.toUpperCase()}.`;
+        message.innerText = `Game Over... The word is ${wordUpper}.`;
         startOver();
     } else if (remainingGuesses === 1) {
         guessCount.innerText = `${remainingGuesses} guess `;
